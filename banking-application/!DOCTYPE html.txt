@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Banking App - Design Patterns</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    .log { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <h1>Banking Application</h1>
+  <button onclick="performDeposit()">Deposit $100</button>
+  <button onclick="performWithdraw()">Withdraw $50</button>
+  <button onclick="undoLast()">Undo Last</button>
+  <button onclick="calculateInterest()">Calculate Interest</button>
+
+  <div class="log" id="log"></div>
+
+  <script>
+    // Observer Pattern
+    class Observer {
+      update(message) {
+        log(message);
+      }
+    }
+
+    class Account {
+      constructor(type, balance = 0, interestStrategy) {
+        this.balance = balance;
+        this.observers = [];
+        this.interestStrategy = interestStrategy;
+        this.type = type;
+      }
+
+      attach(observer) {
+        this.observers.push(observer);
+      }
+
+      notify(message) {
+        this.observers.forEach(obs => obs.update(`[${this.type} Account] ${message}`));
+      }
+
+      deposit(amount) {
+        this.balance += amount;
+        this.notify(`Deposited $${amount}. New Balance: $${this.balance}`);
+      }
+
+      withdraw(amount) {
+        if (amount > this.balance) {
+          this.notify(`Withdrawal of $${amount} failed. Insufficient balance.`);
+          return false;
+        }
+        this.balance -= amount;
+        this.notify(`Withdrew $${amount}. New Balance: $${this.balance}`);
+        return true;
+      }
+
+      calculateInterest() {
+        const interest = this.interestStrategy.calculate(this.balance);
+        this.deposit(interest);
+        this.notify(`Interest of $${interest} applied.`);
+      }
+    }
+
+    // Strategy Pattern
+    class InterestStrategy {
+      calculate(balance) {
+        throw 'Not Implemented';
+      }
+    }
+
+    class SavingsInterest extends InterestStrategy {
+      calculate(balance) {
+        return balance * 0.04;
+      }
+    }
+
+    class FixedDepositInterest extends InterestStrategy {
+      calculate(balance) {
+        return balance * 0.07;
+      }
+    }
+
+    class CurrentAccountInterest extends InterestStrategy {
+      calculate(balance) {
+        return 0; // No interest
+      }
+    }
+
+    // Command Pattern
+    class Command {
+      execute() {}
+      undo() {}
+    }
+
+    class DepositCommand extends Command {
+      constructor(account, amount) {
+        super();
+        this.account = account;
+        this.amount = amount;
+      }
+
+      execute() {
+        this.account.deposit(this.amount);
+      }
+
+      undo() {
+        this.account.withdraw(this.amount);
+      }
+    }
+
+    class WithdrawCommand extends Command {
+      constructor(account, amount) {
+        super();
+        this.account = account;
+        this.amount = amount;
+      }
+
+      execute() {
+        this.success = this.account.withdraw(this.amount);
+      }
+
+      undo() {
+        if (this.success) {
+          this.account.deposit(this.amount);
+        }
+      }
+    }
+
+    // Command Invoker (History)
+    class CommandManager {
+      constructor() {
+        this.history = [];
+      }
+
+      execute(command) {
+        command.execute();
+        this.history.push(command);
+      }
+
+      undoLast() {
+        const cmd = this.history.pop();
+        if (cmd) {
+          cmd.undo();
+        } else {
+          log('Nothing to undo.');
+        }
+      }
+    }
+
+    // Logger
+    function log(message) {
+      const div = document.getElementById('log');
+      div.innerHTML += `<div>${message}</div>`;
+    }
+
+    // Initialize
+    const customer = new Observer();
+    const account = new Account('Savings', 500, new SavingsInterest());
+    account.attach(customer);
+
+    const commandManager = new CommandManager();
+
+    // Button Actions
+    function performDeposit() {
+      const cmd = new DepositCommand(account, 100);
+      commandManager.execute(cmd);
+    }
+
+    function performWithdraw() {
+      const cmd = new WithdrawCommand(account, 50);
+      commandManager.execute(cmd);
+    }
+
+    function undoLast() {
+      commandManager.undoLast();
+    }
+
+    function calculateInterest() {
+      account.calculateInterest();
+    }
+  </script>
+
+</body>
+</html>
