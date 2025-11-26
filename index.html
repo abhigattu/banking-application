@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneBank - Online Banking Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Notification System -->
+    <div id="notification" class="notification hidden">
+        <span id="notificationMessage"></span>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>OneBank</h1>
+                    <p>Secure Online Banking Portal</p>
+                </div>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="customerId" class="form-label">Customer ID</label>
+                        <input type="text" id="customerId" class="form-control" placeholder="Enter Customer ID" required autocomplete="username">
+                        <span class="error-message" id="customerIdError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin" class="form-label">PIN</label>
+                        <input type="password" id="pin" class="form-control" placeholder="Enter PIN" required autocomplete="current-password">
+                        <span class="error-message" id="pinError"></span>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width" id="loginButton">Login</button>
+                    <div class="demo-credentials">
+                        <small>Demo Credentials: Customer ID: <strong>123456</strong>, PIN: <strong>1234</strong></small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">OneBank</h1>
+                </div>
+                <div class="header-right">
+                    <span class="user-welcome">Welcome, <span id="userName">Mittapalli Yashaswini</span></span>
+                    <button id="logoutBtn" class="btn btn--outline btn--sm">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <div class="nav-content">
+                <button class="nav-item active" data-page="dashboard">
+                    <i class="bi bi-house-door nav-icon"></i>
+                    Dashboard
+                </button>
+                <button class="nav-item" data-page="profile">
+                    <i class="bi bi-person nav-icon"></i>
+                    Profile
+                </button>
+                <button class="nav-item" data-page="statements">
+                    <i class="bi bi-file-text nav-icon"></i>
+                    Statements
+                </button>
+                <button class="nav-item" data-page="transfers">
+                    <i class="bi bi-arrow-left-right nav-icon"></i>
+                    Transfers
+                </button>
+                <button class="nav-item" data-page="beneficiaries">
+                    <i class="bi bi-people nav-icon"></i>
+                    Beneficiaries
+                </button>
+            </div>
+        </nav>
+
+        <!-- Breadcrumbs -->
+        <div class="breadcrumbs">
+            <div class="breadcrumb-content" id="breadcrumbs">
+                <span class="breadcrumb-item active">Dashboard</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="content-page active">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Account Overview</h2>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <!-- Account Summary -->
+                    <div class="card account-summary">
+                        <div class="card__header">
+                            <h3><i class="bi bi-credit-card-2-front"></i> Account Summary</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="balance-info">
+                                <div class="balance-item">
+                                    <span class="balance-label">Available Balance</span>
+                                    <span class="balance-amount" id="availableBalance">₹4,58,299.50</span>
+                                </div>
+                                <div class="balance-item">
+                                    <span class="balance-label">Account Number</span>
+                                    <span class="balance-account">****1456</span>
+                                </div>
+                                <div class="balance-item">
+                                    <span class="balance-label">Account Type</span>
+                                    <span class="balance-type">Savings Account</span>
+                                </div>
+                                <div class="balance-item">
+                                    <span class="balance-label">IFSC Code</span>
+                                    <span class="balance-ifsc">HDFC0001234</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card quick-actions">
+                        <div class="card__header">
+                            <h3><i class="bi bi-lightning"></i> Quick Actions</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="action-buttons">
+                                <button class="action-btn" data-page="transfers">
+                                    <i class="bi bi-send action-icon"></i>
+                                    Transfer Money
+                                </button>
+                                <button class="action-btn" data-page="beneficiaries">
+                                    <i class="bi bi-person-plus action-icon"></i>
+                                    Add Beneficiary
+                                </button>
+                                <button class="action-btn" data-page="statements">
+                                    <i class="bi bi-file-earmark-text action-icon"></i>
+                                    View Statements
+                                </button>
+                                <button class="action-btn" data-page="profile">
+                                    <i class="bi bi-gear action-icon"></i>
+                                    Update Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Statistics -->
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-graph-up"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalTransactions">8</span>
+                            <span class="stat-label">This Month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-arrow-up-circle"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value credit" id="totalCredits">₹85,715</span>
+                            <span class="stat-label">Total Credits</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-arrow-down-circle"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value debit" id="totalDebits">₹25,397</span>
+                            <span class="stat-label">Total Debits</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-people"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalBeneficiaries">4</span>
+                            <span class="stat-label">Beneficiaries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="card recent-transactions">
+                    <div class="card__header">
+                        <h3><i class="bi bi-clock-history"></i> Recent Transactions</h3>
+                        <button class="btn btn--outline btn--sm" data-page="statements">View All</button>
+                    </div>
+                    <div class="card__body">
+                        <div class="transactions-list" id="recentTransactionsList">
+                            <!-- Transactions will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="content-page hidden">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Profile Management</h2>
+                </div>
+
+                <div class="profile-tabs">
+                    <button class="tab-btn active" data-tab="personal">Personal Details</button>
+                    <button class="tab-btn" data-tab="security">Security Settings</button>
+                    <button class="tab-btn" data-tab="preferences">Preferences</button>
+                </div>
+
+                <!-- Personal Details Tab -->
+                <div id="personalTab" class="tab-content active">
+                    <div class="profile-grid">
+                        <div class="card profile-picture">
+                            <div class="card__header">
+                                <h3>Profile Picture</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="profile-pic-container">
+                                    <div class="profile-pic-placeholder">
+                                        <span class="profile-initials">MY</span>
+                                    </div>
+                                    <button class="btn btn--secondary btn--sm" id="uploadPicBtn">Upload Picture</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card profile-info">
+                            <div class="card__header">
+                                <h3>Personal Information</h3>
+                                <button class="btn btn--outline btn--sm" id="editProfileBtn">Edit</button>
+                            </div>
+                            <div class="card__body">
+                                <form id="profileForm" class="profile-form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" id="fullName" class="form-control" value="Mittapalli Yashaswini" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Email Address</label>
+                                            <input type="email" id="email" class="form-control" value="yashaswini@example.com" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">Phone Number</label>
+                                            <input type="tel" id="phone" class="form-control" value="+91 9876543210" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Account Type</label>
+                                            <input type="text" id="accountType" class="form-control" value="Savings Account" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Address</label>
+                                        <textarea id="address" class="form-control" rows="3" readonly>123 Main Street, Hyderabad, Telangana 500001</textarea>
+                                    </div>
+                                    <div class="form-actions hidden" id="profileFormActions">
+                                        <button type="submit" class="btn btn--primary">Save Changes</button>
+                                        <button type="button" class="btn btn--secondary" id="cancelEditBtn">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings Tab -->
+                <div id="securityTab" class="tab-content hidden">
+                    <div class="card security-settings">
+                        <div class="card__header">
+                            <h3>Security Settings</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="security-grid">
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h4>Change Password</h4>
+                                        <p>Update your account password for enhanced security</p>
+                                    </div>
+                                    <button class="btn btn--outline" id="changePasswordBtn">Change Password</button>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h4>Two-Factor Authentication</h4>
+                                        <p>Add an extra layer of security to your account</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="twoFactorToggle">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <h4>Login Notifications</h4>
+                                        <p>Get notified when someone logs into your account</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="loginNotificationsToggle" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences Tab -->
+                <div id="preferencesTab" class="tab-content hidden">
+                    <div class="card preferences-settings">
+                        <div class="card__header">
+                            <h3>Contact Preferences</h3>
+                        </div>
+                        <div class="card__body">
+                            <form id="preferencesForm" class="preferences-form">
+                                <div class="preference-group">
+                                    <h4>Notification Preferences</h4>
+                                    <div class="preference-item">
+                                        <label>
+                                            <input type="checkbox" checked> Email notifications for transactions
+                                        </label>
+                                    </div>
+                                    <div class="preference-item">
+                                        <label>
+                                            <input type="checkbox" checked> SMS notifications for transactions
+                                        </label>
+                                    </div>
+                                    <div class="preference-item">
+                                        <label>
+                                            <input type="checkbox"> Marketing communications
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="preference-group">
+                                    <h4>Statement Preferences</h4>
+                                    <div class="form-group">
+                                        <label class="form-label">Statement Delivery</label>
+                                        <select class="form-control">
+                                            <option>Email</option>
+                                            <option>Post</option>
+                                            <option>Both</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Statement Frequency</label>
+                                        <select class="form-control">
+                                            <option>Monthly</option>
+                                            <option>Quarterly</option>
+                                            <option>Annually</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn--primary">Save Preferences</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statements Page -->
+        <div id="statementsPage" class="content-page hidden">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Account Statements</h2>
+                </div>
+
+                <!-- Statement Filters -->
+                <div class="card statement-filters">
+                    <div class="card__header">
+                        <h3>Filter Transactions</h3>
+                        <div class="filter-actions">
+                            <button class="btn btn--outline btn--sm" id="resetFiltersBtn">Reset</button>
+                            <button class="btn btn--primary btn--sm" id="applyFiltersBtn">Apply Filters</button>
+                        </div>
+                    </div>
+                    <div class="card__body">
+                        <div class="filter-grid">
+                            <div class="form-group">
+                                <label class="form-label">Period</label>
+                                <select id="statementPeriod" class="form-control">
+                                    <option value="1month">Last 1 Month</option>
+                                    <option value="3months">Last 3 Months</option>
+                                    <option value="6months">Last 6 Months</option>
+                                    <option value="1year">Last 1 Year</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">From Date</label>
+                                <input type="date" id="fromDate" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">To Date</label>
+                                <input type="date" id="toDate" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Transaction Type</label>
+                                <select id="transactionType" class="form-control">
+                                    <option value="">All Types</option>
+                                    <option value="Credit">Credit</option>
+                                    <option value="Debit">Debit</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Minimum Amount</label>
+                                <input type="number" id="minAmount" class="form-control" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Maximum Amount</label>
+                                <input type="number" id="maxAmount" class="form-control" placeholder="No limit">
+                            </div>
+                        </div>
+                        <div class="search-bar">
+                            <input type="text" id="transactionSearch" class="form-control" placeholder="Search transactions...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statement Summary -->
+                <div class="card statement-summary">
+                    <div class="card__header">
+                        <h3>Summary</h3>
+                        <div class="export-actions">
+                            <button class="btn btn--outline btn--sm" id="downloadPdfBtn">
+                                <i class="bi bi-file-pdf"></i> Download PDF
+                            </button>
+                            <button class="btn btn--outline btn--sm" id="exportExcelBtn">
+                                <i class="bi bi-file-excel"></i> Export Excel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card__body">
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <span class="summary-label">Total Credits</span>
+                                <span class="summary-value credit" id="totalCreditsSum">₹85,714.75</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Total Debits</span>
+                                <span class="summary-value debit" id="totalDebitsSum">₹25,397.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Net Amount</span>
+                                <span class="summary-value" id="netAmount">₹60,317.75</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Transaction Count</span>
+                                <span class="summary-value" id="transactionCount">8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Table -->
+                <div class="card transactions-table">
+                    <div class="card__header">
+                        <h3>Transaction Details</h3>
+                        <div class="table-actions">
+                            <select id="sortBy" class="form-control">
+                                <option value="date-desc">Date (Latest First)</option>
+                                <option value="date-asc">Date (Oldest First)</option>
+                                <option value="amount-desc">Amount (High to Low)</option>
+                                <option value="amount-asc">Amount (Low to High)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card__body">
+                        <div class="table-responsive">
+                            <table class="transactions-table-element">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Balance</th>
+                                        <th>Reference</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsTableBody">
+                                    <!-- Transactions will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfers Page -->
+        <div id="transfersPage" class="content-page hidden">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Money Transfer</h2>
+                </div>
+
+                <div class="transfer-options">
+                    <button class="transfer-option-btn active" data-option="existing">
+                        <i class="bi bi-people option-icon"></i>
+                        <div>
+                            <h3>Existing Beneficiary</h3>
+                            <p>Transfer to saved beneficiaries</p>
+                        </div>
+                    </button>
+                    <button class="transfer-option-btn" data-option="new">
+                        <i class="bi bi-person-plus option-icon"></i>
+                        <div>
+                            <h3>New Recipient</h3>
+                            <p>Transfer to a new recipient</p>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Existing Beneficiary Transfer -->
+                <div id="existingTransfer" class="transfer-form-container active">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3>Transfer to Existing Beneficiary</h3>
+                        </div>
+                        <div class="card__body">
+                            <form id="existingTransferForm" class="transfer-form">
+                                <div class="form-group">
+                                    <label class="form-label">Select Beneficiary</label>
+                                    <select id="beneficiarySelect" class="form-control" required>
+                                        <option value="">Choose beneficiary...</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Amount (₹)</label>
+                                        <input type="number" id="existingAmount" class="form-control" step="0.01" min="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Transfer Mode</label>
+                                        <select id="existingTransferMode" class="form-control" required>
+                                            <option value="IMPS">IMPS</option>
+                                            <option value="NEFT">NEFT</option>
+                                            <option value="RTGS">RTGS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Remarks (Optional)</label>
+                                    <input type="text" id="existingRemarks" class="form-control" maxlength="100">
+                                </div>
+                                <button type="submit" class="btn btn--primary btn--full-width">Transfer Money</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Recipient Transfer -->
+                <div id="newTransfer" class="transfer-form-container hidden">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3>Transfer to New Recipient</h3>
+                        </div>
+                        <div class="card__body">
+                            <form id="newTransferForm" class="transfer-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Beneficiary Name</label>
+                                        <input type="text" id="newBeneficiaryName" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Account Number</label>
+                                        <input type="text" id="newAccountNumber" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">IFSC Code</label>
+                                        <input type="text" id="newIfscCode" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Bank Name</label>
+                                        <input type="text" id="newBankName" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Amount (₹)</label>
+                                        <input type="number" id="newAmount" class="form-control" step="0.01" min="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Transfer Mode</label>
+                                        <select id="newTransferMode" class="form-control" required>
+                                            <option value="IMPS">IMPS</option>
+                                            <option value="NEFT">NEFT</option>
+                                            <option value="RTGS">RTGS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Remarks (Optional)</label>
+                                    <input type="text" id="newRemarks" class="form-control" maxlength="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="addToBeneficiaries">
+                                        Add to beneficiaries for future transfers
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn--primary btn--full-width">Transfer Money</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transfer Password Modal -->
+                <div id="transferPasswordModal" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Confirm Transfer</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="transferSummary"></div>
+                            <div class="form-group">
+                                <label class="form-label">Enter Transfer Password</label>
+                                <input type="password" id="transferPassword" class="form-control" placeholder="Enter transfer password" required>
+                                <small>Demo transfer password: <strong>mypassword123</strong></small>
+                                <span class="error-message" id="transferPasswordError"></span>
+                            </div>
+                            <div class="modal-actions">
+                                <button id="confirmTransferBtn" class="btn btn--primary">Confirm Transfer</button>
+                                <button class="btn btn--secondary modal-close">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beneficiaries Page -->
+        <div id="beneficiariesPage" class="content-page hidden">
+            <div class="container">
+                <div class="page-header">
+                    <h2>Manage Beneficiaries</h2>
+                    <button class="btn btn--primary" id="addBeneficiaryBtn">
+                        <i class="bi bi-person-plus"></i> Add New Beneficiary
+                    </button>
+                </div>
+
+                <div class="beneficiaries-grid" id="beneficiariesGrid">
+                    <!-- Beneficiaries will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div id="successPage" class="content-page hidden">
+            <div class="container">
+                <div class="success-container">
+                    <div class="success-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h2>Transfer Successful!</h2>
+                    <div class="success-details" id="successDetails">
+                        <!-- Transfer details will be populated by JavaScript -->
+                    </div>
+                    <div class="success-actions">
+                        <button class="btn btn--primary" data-page="dashboard">Go to Dashboard</button>
+                        <button class="btn btn--outline" data-page="transfers">Make Another Transfer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Password</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="changePasswordForm" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" id="currentPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" id="newPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn--primary">Change Password</button>
+                    <button type="button" class="btn btn--secondary modal-close">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Beneficiary Modal -->
+    <div id="beneficiaryModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="beneficiaryModalTitle">Add New Beneficiary</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="beneficiaryForm" class="modal-body">
+                <input type="hidden" id="beneficiaryId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Beneficiary Name</label>
+                        <input type="text" id="beneficiaryName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nickname</label>
+                        <input type="text" id="beneficiaryNickname" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Account Number</label>
+                        <input type="text" id="beneficiaryAccount" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">IFSC Code</label>
+                        <input type="text" id="beneficiaryIfsc" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Bank Name</label>
+                        <input type="text" id="beneficiaryBank" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Branch</label>
+                        <input type="text" id="beneficiaryBranch" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn--primary">Save Beneficiary</button>
+                    <button type="button" class="btn btn--secondary modal-close">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmationTitle">Confirm Action</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage">Are you sure you want to proceed?</p>
+                <div class="modal-actions">
+                    <button id="confirmActionBtn" class="btn btn--primary">Confirm</button>
+                    <button class="btn btn--secondary modal-close">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
